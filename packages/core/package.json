@@ -1,0 +1,43 @@
+{
+  "name": "vite-plugin-version-env",
+  "version": "1.0.0",
+  "description": "",
+  "main": "./dist/VersionPlugin.cjs",
+  "module": "./dist/VersionPlugin.mjs",
+  "types": "./dist/index.d.ts",
+  "homepage": "https://github.com/luna-lee/vite-plugin-version-env.git",
+  "scripts": {
+    "build": "pnpm unbuild && npm run copy-dts",
+    "publish": "npm publish",
+    "copy-dts": "cp src/*.d.ts dist"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "MIT",
+  "engines": {
+    "node": ">= 10.13.0"
+  },
+  "exports": {
+    "./*": "./*",
+    "./SetAxiosProxy": "./dist/SetAxiosProxy.mjs",
+    "./VersionPlugin": "./dist/VersionPlugin.mjs",
+    ".": {
+      "types": "./dist/index.d.ts"
+    }
+  },
+  "files": [
+    "dist",
+    "README.md"
+  ],
+  "peerDependencies": {
+    "axios": "*",
+    "vite": "*"
+  },
+  "dependencies": {
+    "fs-extra": "^11.2.0"
+  },
+  "devDependencies": {
+    "@types/fs-extra": "^11.0.4",
+    "axios": "^1.7.5"
+  }
+}

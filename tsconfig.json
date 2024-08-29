@@ -1,0 +1,33 @@
+{
+  "compilerOptions": {
+    "module": "ESNext",
+    "target": "es2017",
+    "moduleResolution": "node",
+    "noImplicitThis": false,
+    "strict": true,
+    "declaration": true,
+    "noUnusedLocals": true,
+    "types": [
+      "vite/client"
+    ],
+    "esModuleInterop": true,
+    // "outDir": "dist",
+    "declarationDir": "./dist/types",
+    "lib": [
+      "esnext",
+      "dom"
+    ],
+    "baseUrl": ".",
+    "sourceMap": false,
+    "noEmitOnError": true
+  },
+  "include": [
+    "./packages/**/*.ts",
+    "./packages/**/*.d.ts"
+  ],
+  "exclude": [
+    "**/dist",
+    "**/node_modules",
+    "**/test"
+  ]
+}
