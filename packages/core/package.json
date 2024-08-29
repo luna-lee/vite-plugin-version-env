@@ -1,6 +1,6 @@
 {
   "name": "vite-plugin-version-env",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "",
   "main": "./dist/index.cjs",
   "module": "./dist/index.mjs",
@@ -21,9 +21,9 @@
       "import": "./dist/index.mjs",
       "types": "./dist/index.d.ts"
     },
-    "./AxiosProxy": {
-      "import": "./dist/AxiosProxy.mjs",
-      "types": "./dist/AxiosProxy.d.ts"
+    "./ConfigBaseUrl": {
+      "import": "./dist/ConfigBaseUrl.mjs",
+      "types": "./dist/ConfigBaseUrl.d.ts"
     },
     "./client": {
       "types": "./client.d.ts"

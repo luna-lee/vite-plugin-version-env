@@ -1,5 +1,6 @@
 declare namespace VersionEnvSpace {
   interface GlobalConfig {
+    api_base: string;
     DEV?: DevConfig;
     [x: string]: any;
   }

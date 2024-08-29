@@ -54,6 +54,7 @@ export default {
 ```
 declare namespace VersionEnvSpace {
   interface GlobalConfig {
+    api_base: string;
     DEV?: DevConfig;
     [x: string]: any;
   }
@@ -112,7 +113,7 @@ export default defineConfig(async ({ mode, command }: ConfigEnv): Promise<UserCo
    return {
     plugins: [ VersionPlugin({ CustomEnv, command, '__GLOBAL_CONFIG__', 'app.config.js' }),],
     server: {  
-       cors: true,
+      cors: true,
       open: true,
       host: '0.0.0.0',
       ...ServerPlugin(CustomEnv)
@@ -144,14 +145,18 @@ export default defineConfig(async ({ mode, command }: ConfigEnv): Promise<UserCo
 #### Axios配置
 
 ```
-import { AxiosProxy } from 'vite-plugin-version-env/AxiosProxy';
+import { ConfigBaseUrl } from 'vite-plugin-version-env/ConfigBaseUrl';
 http.interceptors.request.use(async (config) => {
-  AxiosProxy(config);
+  ConfigBaseUrl(config);
    return config;
   }
 ```
 
-#### AxiosProxyType
+#### ConfigBaseUrl
+
+- 开发环境下，axios中无需配置baseUrl，自动依据代理配置，设置成代理字符。没有代理时使用GlobalConfig.api_base
+
+- 生产环境，使用GlobalConfig.api_base
 
 ```
 (AxiosConfig: InternalAxiosRequestConfig<any>, GlobalConfig?: VersionEnvSpace.GlobalConfig) => void
