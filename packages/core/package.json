@@ -1,15 +1,14 @@
 {
   "name": "vite-plugin-version-env",
-  "version": "1.0.0",
+  "version": "1.0.2",
   "description": "",
-  "main": "./dist/VersionPlugin.cjs",
-  "module": "./dist/VersionPlugin.mjs",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.mjs",
   "types": "./dist/index.d.ts",
   "homepage": "https://github.com/luna-lee/vite-plugin-version-env.git",
   "scripts": {
-    "build": "pnpm unbuild && npm run copy-dts",
-    "publish": "npm publish",
-    "copy-dts": "cp src/*.d.ts dist"
+    "build": "pnpm unbuild",
+    "publish": "npm publish"
   },
   "keywords": [],
   "author": "",
@@ -18,15 +17,30 @@
     "node": ">= 10.13.0"
   },
   "exports": {
-    "./*": "./*",
-    "./SetAxiosProxy": "./dist/SetAxiosProxy.mjs",
-    "./VersionPlugin": "./dist/VersionPlugin.mjs",
     ".": {
+      "import": "./dist/index.mjs",
       "types": "./dist/index.d.ts"
+    },
+    "./AxiosProxy": {
+      "import": "./dist/AxiosProxy.mjs",
+      "types": "./dist/AxiosProxy.d.ts"
+    },
+    "./client": {
+      "types": "./client.d.ts"
+    },
+    "./*": "./*"
+  },
+  "typesVersions": {
+    "*": {
+      "*": [
+        "./dist/*",
+        "./*"
+      ]
     }
   },
   "files": [
     "dist",
+    "client.d.ts",
     "README.md"
   ],
   "peerDependencies": {

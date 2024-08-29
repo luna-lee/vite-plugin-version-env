@@ -1,13 +1,13 @@
-import type { InternalAxiosRequestConfig } from "axios";
+import { InternalAxiosRequestConfig } from "axios";
 
 function normalizeUrl(url: string) {
   if (/^(https?:\/\/)/.test(url)) return url.replace(/([^:]\/)\/+/g, "$1");
   else return url.replace(/\/+/g, "/");
 }
 
-export const SetAxiosProxy = (
+export const AxiosProxy = (
   AxiosConfig: InternalAxiosRequestConfig<any>,
-  GlobalConfig: VersionEnvSpace.GlobalConfig
+  GlobalConfig: VersionEnvSpace.GlobalConfig = GLOBAL_CONFIG
 ) => {
   try {
     AxiosConfig.baseURL = GlobalConfig.api_base;

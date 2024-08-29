@@ -1,12 +1,5 @@
 declare namespace VersionEnvSpace {
   interface GlobalConfig {
-    web_tilte?: string;
-    cache_store: string[];
-    api_base: string;
-    api_idaas: string;
-    api_file: string;
-    api_security: string;
-    api_gis: string;
     DEV?: DevConfig;
     [x: string]: any;
   }
@@ -26,5 +19,4 @@ declare namespace VersionEnvSpace {
     DEV?: DevConfig;
   }
 }
-
-declare type Recordable<T = any> = Record<string, T>;
+declare const GLOBAL_CONFIG: VersionEnvSpace.GlobalConfig;
