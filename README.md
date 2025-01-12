@@ -37,6 +37,7 @@
 ```typescript
  declare namespace VersionEnvSpace {
   interface GlobalConfig {
+    web_tilte?: string;
     api_base: string;
     DEV?: DevConfig;
     [x: string]: any;
@@ -60,6 +61,7 @@
 declare const GLOBAL_CONFIG: VersionEnvSpace.GlobalConfig;
 
 ```
+当有web_tilte配置时，会自动写入index.html中
 
 ##### 	扩展配置项类型，在d.ts文件中可扩展GlobalConfig类型
 
@@ -197,4 +199,7 @@ global.d.ts
 declare const CUSTON_GLOBAL_CONFIG: VersionEnvSpace.GlobalConfig;
 ```
 
+## 全局参数
 
+ -  GLOBAL_VERSION_CODE 版本号
+ -  GLOBAL_CONFIG 全局配置
