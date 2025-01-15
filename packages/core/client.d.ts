@@ -1,7 +1,5 @@
 declare namespace VersionEnvSpace {
   interface GlobalConfig {
-    web_tilte?: string;
-    api_base: string;
     DEV?: DevConfig;
     [x: string]: any;
   }

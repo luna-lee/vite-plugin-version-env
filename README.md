@@ -4,15 +4,11 @@
 
 ## 功能
 
-1. ### 设置全局变量。
+1. ### 构建后所有的静态资源会被打包到一个以当前时间为名称的文件夹内,作为打包后的版本标记。
 
-2. ### 构建时依据环境，设置当前环境对应的全局参数。
+2. ### 构建时，获取当前环境的配置项，并将之设置为全局参数。
 
 3. ### 开发环境下，增强代理配置功能。可实现不同接口走不同的代理，也可过滤指定接口。
-
-4. ### 构建后所有的静态资源会被打包到一个以当前时间为名称的文件夹内
-
-
 
 
 
@@ -37,8 +33,6 @@
 ```typescript
  declare namespace VersionEnvSpace {
   interface GlobalConfig {
-    web_tilte?: string;
-    api_base: string;
     DEV?: DevConfig;
     [x: string]: any;
   }
@@ -61,14 +55,11 @@
 declare const GLOBAL_CONFIG: VersionEnvSpace.GlobalConfig;
 
 ```
-当有web_tilte配置时，会自动写入index.html中
-
 ##### 	扩展配置项类型，在d.ts文件中可扩展GlobalConfig类型
 
 ```
 namespace VersionEnvSpace {
     interface GlobalConfig {
-      web_tilte?: string;
       cache_store: string[];
       api_base: string;
       api_idaas: string;
@@ -98,7 +89,6 @@ build/config
 export default {
   //全局配置项，打包后会存入 app.config.js文件中。
   GLOBAL_CONFIG: {
-    web_tilte: '开发环境',
     cache_store: ['oauth', 'global'],
     api_base: 'http://fyeb.cnsaas.com/support-gateway/',
     api_idaas: '/idaas/',
@@ -149,8 +139,9 @@ export default defineConfig(async ({ mode, command }: ConfigEnv): Promise<UserCo
 
 ```
 ({ CustomEnv, command, cleanDir, GLOBAL_CONFIG_FILE_NAME, GLOBAL_CONFIG_KEY, GLOBAL_CONFIG_NAME, }: {
-    CustomEnv: VersionEnvSpace.EnvConfig;
     command: 'build' | 'serve';
+    webTitle?: string;
+    CustomEnv?: VersionEnvSpace.EnvConfig;
     cleanDir?: boolean;
     GLOBAL_CONFIG_FILE_NAME?: string;
     GLOBAL_CONFIG_KEY?: string;
@@ -159,39 +150,33 @@ export default defineConfig(async ({ mode, command }: ConfigEnv): Promise<UserCo
 ```
 | 属性                        | 类型      | 描述                           | 默认值           |
 |---------------------------|---------|-------------------------------|-----------------|
+| `webTitle`                | String  | 网页标题                       | -               |
 | `CustomEnv`               | Object  | 配置对象                       | -               |
-| `command`                 | 'build' \|'serve' |                    | -               |
+| `command`                 | 'build' \|'serve' | 构建命令                     | -               |
 | `cleanDir`                | Boolean | 是否清空输出目录               | `true`     |
 | `GLOBAL_CONFIG_FILE_NAME` | String  | 存放全局配置的文件名           | app.config.js |
 | `GLOBAL_CONFIG_KEY`       | String  | 挂载到 `window` 对象上的属性名 | `\__GLOBAL_CONFIG__` |
 | `GLOBAL_CONFIG_NAME`      | String  | 代码可用的全局对象名           | `GLOBAL_CONFIG` |
 
 
-
 #### 项目中的Axios配置，实现在开发环境下，设置了代理模式后，不同的接口走不通的代理。
 
 ```
-import { ConfigBaseUrl } from 'vite-plugin-version-env/ConfigBaseUrl';
+import { SetDevProxy } from 'vite-plugin-version-env/SetDevProxy';
 http.interceptors.request.use(async (config) => {
-  ConfigBaseUrl(config);
+  SetDevProxy(config);
    return config;
   }
 ```
 
-#### ConfigBaseUrl
+#### SetDevProxy
 
-- 开发环境下，axios中无需配置baseUrl，自动依据代理配置，设置成代理字符。没有代理时使用GlobalConfig.api_base
+-  开发环境，依据代理配置，设置axios的baseURLGlobalConfig.api_base
 
-- 生产环境，使用GlobalConfig.api_base
 
 ```
-(AxiosConfig: InternalAxiosRequestConfig<any>, GlobalConfig?: VersionEnvSpace.GlobalConfig) => void
+ (AxiosConfig: InternalAxiosRequestConfig<any>, ProxyConfig: VersionEnvSpace.DevConfig) => void
 ```
-
-- 若GLOBAL_CONFIG_NAME没有自定义，则可以不用传，若自定义则必须传入自定义的
-
-- 并且需要在类型文件中声明其类型
-
 
 ```
 global.d.ts

@@ -10,9 +10,10 @@ function omit(obj: Recordable, omitKeys: string[]) {
   }
   return obj;
 }
-export default (CustomEnv: VersionEnvSpace.EnvConfig): ServerOptions => {
+export default (CustomEnv?: VersionEnvSpace.EnvConfig): ServerOptions => {
   // 开发环境依据配置的内容设置代理服务对象
   const ServerConfig: ServerOptions = {};
+  if (!CustomEnv) return ServerConfig;
   if (CustomEnv.DEV) {
     if (CustomEnv.DEV.port) ServerConfig.port = CustomEnv.DEV.port;
     if (CustomEnv.DEV.proxy && Array.isArray(CustomEnv.DEV.proxy_list)) {

@@ -5,23 +5,22 @@ function normalizeUrl(url: string) {
   else return url.replace(/\/+/g, "/");
 }
 
-export const ConfigBaseUrl= (
+// 开发环境，依据代理配置，设置axios的baseURL
+export default (
   AxiosConfig: InternalAxiosRequestConfig<any>,
-  GlobalConfig: VersionEnvSpace.GlobalConfig = GLOBAL_CONFIG
+  ProxyConfig: VersionEnvSpace.DevConfig
 ) => {
   try {
-    // 外部没有设置时自动baseURL为api_base
-    if (!AxiosConfig.baseURL) AxiosConfig.baseURL = GlobalConfig.api_base;
     // 匹配校验当前url是否需要走代理。
     if (AxiosConfig.url) {
       // 规范化url
       AxiosConfig.url = normalizeUrl(AxiosConfig.url);
       if (
         import.meta.env.DEV &&
-        GlobalConfig?.DEV?.proxy &&
-        Array.isArray(GlobalConfig.DEV.proxy_list)
+        ProxyConfig?.proxy &&
+        Array.isArray(ProxyConfig.proxy_list)
       ) {
-        GlobalConfig.DEV.proxy_list.forEach((proxy) => {
+        ProxyConfig.proxy_list.forEach((proxy) => {
           // 若没有设置则全部匹配
           const includeRegx = new RegExp(proxy.include || "(?:)");
           // 若没有设置则全部不匹配
