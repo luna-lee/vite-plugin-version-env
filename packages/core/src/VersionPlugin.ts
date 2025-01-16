@@ -149,9 +149,13 @@ export default ({
           `<title>${webTitle || ""}</title>`
         );
         const config: any = {
-          html: html.replace(/\.\//g, `./${version}/`),
+          html: html,
           tags: [],
         };
+        // 如果构建，则添加版本号
+        if (isBuild) {
+          config.html = config.html.replace(/\.\//g, `./${version}/`);
+        }
         // 如果存在环境配置，则添加全局配置文件
         if (CustomEnv) {
           config.tags = [
