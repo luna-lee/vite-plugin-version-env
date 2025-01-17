@@ -2,6 +2,18 @@ import path from "path";
 import fs from "fs-extra";
 import type { IndexHtmlTransformHook, UserConfig } from "vite";
 
+function replaceTitleContent(htmlString: string, newContent: string) {
+  // 正则表达式匹配 <title> 元素及其内容
+  const titleRegex = /(<title\b[^>]*>)([\s\S]*?)(<\/title>)/gi;
+
+  // 使用正则表达式替换 <title> 元素中的内容
+  return htmlString.replace(
+    titleRegex,
+    (match, startTag, oldContent, endTag) => {
+      return `${startTag}${newContent}${endTag}`;
+    }
+  );
+}
 /**
  * 从当前工作目录解析绝对路径
  * @param {...any} args - 路径片段参数
@@ -144,10 +156,7 @@ export default ({
     transformIndexHtml: {
       handler(html) {
         // 替换网页标题
-        html = html.replace(
-          /<title>(.*?)<\/title>/,
-          `<title>${webTitle || ""}</title>`
-        );
+        replaceTitleContent(html, webTitle || "");
         const config: any = {
           html: html,
           tags: [],
