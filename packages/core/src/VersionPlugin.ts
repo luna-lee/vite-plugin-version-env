@@ -156,7 +156,7 @@ export default ({
     transformIndexHtml: {
       handler(html) {
         // 替换网页标题
-        replaceTitleContent(html, webTitle || "");
+        html = replaceTitleContent(html, webTitle || "");
         const config: any = {
           html: html,
           tags: [],
