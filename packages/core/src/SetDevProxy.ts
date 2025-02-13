@@ -8,7 +8,7 @@ function normalizeUrl(url: string) {
 // 开发环境，依据代理配置，设置axios的baseURL
 export default (
   AxiosConfig: InternalAxiosRequestConfig<any>,
-  ProxyConfig: VersionEnvSpace.DevConfig
+  ProxyConfig?: VersionEnvSpace.DevConfig
 ) => {
   try {
     // 匹配校验当前url是否需要走代理。

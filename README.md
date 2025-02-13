@@ -164,7 +164,7 @@ export default defineConfig(async ({ mode, command }: ConfigEnv): Promise<UserCo
 ```
 import { SetDevProxy } from 'vite-plugin-version-env/SetDevProxy';
 http.interceptors.request.use(async (config) => {
-  SetDevProxy(config);
+  SetDevProxy(config,GLOBAL_CONFIG.DEV);
    return config;
   }
 ```
@@ -172,10 +172,11 @@ http.interceptors.request.use(async (config) => {
 #### SetDevProxy
 
 -  开发环境，依据代理配置，设置axios的baseURLGlobalConfig.api_base
+-  ProxyConfig为undefined时则不起作用
 
 
 ```
- (AxiosConfig: InternalAxiosRequestConfig<any>, ProxyConfig: VersionEnvSpace.DevConfig) => void
+ (AxiosConfig: InternalAxiosRequestConfig<any>, ProxyConfig?: VersionEnvSpace.DevConfig) => void
 ```
 
 ```
