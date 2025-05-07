@@ -91,9 +91,13 @@ export default ({
     );
     if (!isBuild) _CustomEnv.GLOBAL_CONFIG.DEV = CustomEnv.DEV;
     const context = `
-    window.${GLOBAL_CONFIG_KEY}= ${JSON.stringify(_CustomEnv.GLOBAL_CONFIG)}  
-    Object.freeze(window.${GLOBAL_CONFIG_KEY}); 
-    Object.defineProperty(window, "${GLOBAL_CONFIG_KEY}", { configurable: false, writable: false, });
+window.${GLOBAL_CONFIG_KEY}= ${JSON.stringify(
+  _CustomEnv.GLOBAL_CONFIG,
+  null,
+  4
+)}  
+Object.freeze(window.${GLOBAL_CONFIG_KEY}); 
+Object.defineProperty(window, "${GLOBAL_CONFIG_KEY}", { configurable: false, writable: false });
                 `;
     fs.outputFile(filePath, context);
   }
