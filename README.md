@@ -162,7 +162,7 @@ export default defineConfig(async ({ mode, command }: ConfigEnv): Promise<UserCo
 #### 项目中的Axios配置，实现在开发环境下，设置了代理模式后，不同的接口走不通的代理。
 
 ```
-import { SetDevProxy } from 'vite-plugin-version-env/SetDevProxy';
+import  SetDevProxy from 'vite-plugin-version-env/SetDevProxy';
 http.interceptors.request.use(async (config) => {
   SetDevProxy(config,GLOBAL_CONFIG.DEV);
    return config;
