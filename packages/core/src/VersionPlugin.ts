@@ -27,7 +27,7 @@ const absolutePath = (...args: any) => path.resolve(process.cwd(), ...args);
  * 例如: 240315143022 表示 2024年03月15日14时30分22秒
  * @returns {string} 版本号字符串
  */
-function generatorVersionCode() {
+export function generatorVersionCode() {
   var d = new Date();
   var yy = d.getFullYear().toString().slice(2);
   var MM = d.getMonth() + 1 >= 10 ? d.getMonth() + 1 : "0" + (d.getMonth() + 1);
@@ -53,6 +53,7 @@ function generatorVersionCode() {
  * @param {'build' | 'serve'} options.command - Vite 命令模式
  * @param {boolean} [options.cleanDir=true] - 是否在构建前清理输出目录
  * @param {string} [options.webTitle] - 网页标题
+ * @param {string} [options.CustomVersionCode] - 自定义版本号，若不提供则自动生成
  * @param {string} [options.GLOBAL_CONFIG_FILE_NAME='app.config.js'] - 全局配置文件名
  * @param {string} [options.GLOBAL_CONFIG_KEY='__GLOBAL_CONFIG__'] - 全局配置在 window 对象中的键名
  * @param {string} [options.GLOBAL_CONFIG_NAME='GLOBAL_CONFIG'] - 全局配置变量名
@@ -63,6 +64,9 @@ export default ({
   CustomEnv,
   cleanDir = true,
   webTitle,
+  excludeDir,
+  delay = 1000,
+  CustomVersionCode,
   GLOBAL_CONFIG_FILE_NAME = "app.config.js",
   GLOBAL_CONFIG_KEY = "__GLOBAL_CONFIG__",
   GLOBAL_CONFIG_NAME = "GLOBAL_CONFIG",
@@ -71,11 +75,14 @@ export default ({
   CustomEnv?: VersionEnvSpace.EnvConfig;
   cleanDir?: boolean;
   webTitle?: string;
+  excludeDir?: string[];
+  delay?: number;
+  CustomVersionCode?: string;
   GLOBAL_CONFIG_FILE_NAME?: string;
   GLOBAL_CONFIG_KEY?: string;
   GLOBAL_CONFIG_NAME?: string;
 }) => {
-  const version = generatorVersionCode();
+  const version = CustomVersionCode || generatorVersionCode();
   const isBuild = command === "build";
 
   /**
@@ -92,10 +99,10 @@ export default ({
     if (!isBuild) _CustomEnv.GLOBAL_CONFIG.DEV = CustomEnv.DEV;
     const context = `
 window.${GLOBAL_CONFIG_KEY}= ${JSON.stringify(
-  _CustomEnv.GLOBAL_CONFIG,
-  null,
-  4
-)}  
+      _CustomEnv.GLOBAL_CONFIG,
+      null,
+      4
+    )}  
 Object.freeze(window.${GLOBAL_CONFIG_KEY}); 
 Object.defineProperty(window, "${GLOBAL_CONFIG_KEY}", { configurable: false, writable: false });
                 `;
@@ -216,6 +223,17 @@ Object.defineProperty(window, "${GLOBAL_CONFIG_KEY}", { configurable: false, wri
 
         // 将 index.html 移动到父目录
         fs.move(srcDir, destDir, { overwrite: true });
+        // 将排除的目录移到到父目录
+        const exclude = excludeDir || [];
+        setTimeout(() => {
+          exclude.forEach((dir) => {
+            const srcExcludeDir = path.join(outputDir, dir);
+            const destExcludeDir = path.join(outputDir, "..", dir);
+            if (fs.existsSync(srcExcludeDir)) {
+              fs.moveSync(srcExcludeDir, destExcludeDir, { overwrite: true });
+            }
+          });
+        }, delay || 1000);
       }
     },
   };
